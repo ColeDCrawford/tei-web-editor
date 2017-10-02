@@ -10474,6 +10474,7 @@ var Util = {
   },
   parseXMLContent: function(data){
     var content = base64.decode(data.content);
+    content = this.decode_utf8(content);
     return content;
   },
   addXMLContent: function(content){
@@ -10599,6 +10600,7 @@ var Util = {
 
     }
   },
+<<<<<<< .merge_file_Rrp9lI
   toggleHelp: function(){
     $("#help-content").empty();
     $("#help-viewer").addClass("visible");
@@ -10636,6 +10638,13 @@ var Util = {
     } else {
       $('#help-content').html("No help documentation.");
     }
+=======
+  encode_utf8: function(s){
+    return unescape(encodeURIComponent(s));
+  },
+  decode_utf8: function(s) {
+    return decodeURIComponent(escape(s));
+>>>>>>> .merge_file_9TWkUC
   }
 }
 
@@ -32218,7 +32227,8 @@ var Main = {
     $("#save-form").submit(function(e){
       e.preventDefault();
       var textContent = aceEditor.getValue();
-      var content = base64.encode(textContent);
+
+      var content = base64.encode(__WEBPACK_IMPORTED_MODULE_4__Util_js__["a" /* default */].encode_utf8(textContent));
 
       //get data for file name
       var url = $("#save-url").text();
