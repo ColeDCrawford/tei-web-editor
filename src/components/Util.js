@@ -88,6 +88,7 @@ var Util = {
   },
   parseXMLContent: function(data){
     var content = base64.decode(data.content);
+    content = this.decode_utf8(content);
     return content;
   },
   addXMLContent: function(content){
@@ -208,6 +209,12 @@ var Util = {
         Util.clearSaveParameters();
 
     }
+  },
+  encode_utf8: function(s){
+    return unescape(encodeURIComponent(s));
+  },
+  decode_utf8: function(s) {
+    return decodeURIComponent(escape(s));
   }
 }
 
