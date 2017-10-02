@@ -15,9 +15,28 @@ var Util = {
   setAccessToken: function(access_token){
     this.access_token = access_token;
   },
+  setBaseUrls: function(apiBaseUrl, baseUrl){
+    this.apiBaseUrl = apiBaseUrl;
+    this.baseUrl = baseUrl;
+  },
+  setHelpUrls: function(helpUrls){
+    this.helpUrls = helpUrls;
+    console.log(Util.helpUrls);
+  },
+  removeExtras: function(hideSuggestedRepos, hideForkAnotherRepo, hidePR){
+    if(hideSuggestedRepos && typeof hideSuggestedRepos !== undefined){
+      $('#suggested-repositories').closest('div').remove();
+    }
+    if(hideForkAnotherRepo && typeof hideForkAnotherRepo !== undefined){
+      $('#fork-manual').closest('div').remove();
+    }
+    if(hidePR && typeof hidePR !== undefined){
+      $('#display-pr').parent('li').remove();
+    }
+  },
   togglePreview: function(){
     if ($('#preview').is(':visible')){
-      $("#editor").animate({"width": "100%"})
+      $("#resizable-editor").animate({"width": "100%"})
       $('#preview').slideToggle();
       if (!$('#editor').is(':visible')){
         //mirador toggle is buggy because the styling doesn't adjust until the window is adjusted
@@ -27,7 +46,7 @@ var Util = {
       }
     }
     else{
-      $("#editor").animate({"width": "50%"})
+      $("#resizable-editor").animate({"width": "50%"})
       //mirador toggle is buggy because the styling doesn't adjust until the window is adjusted
       $("#mirador-viewer").animate({"height": "40%"})
       $('#preview').slideToggle("slow", function(){
@@ -38,7 +57,7 @@ var Util = {
   toggleEditor: function(){
     if ($('#editor').is(':visible')){
       $("#preview").animate({"width": "100%"})
-      $('#editor').slideToggle();
+      $('#resizable-editor').slideToggle();
       if (!$('#preview').is(':visible')){
         //mirador toggle is buggy because the styling doesn't adjust until the window is adjusted
         $("#mirador-viewer").animate({"height": "100%"}, function(){
@@ -49,8 +68,8 @@ var Util = {
     else{
       $("#preview").animate({"width": "50%"})
       //mirador toggle is buggy because the styling doesn't adjust until the window is adjusted
-      $("#mirador-viewer").animate({"height": "40%"})
-      $('#editor').slideToggle("slow", function(){
+      //$("#mirador-viewer").animate({"height": "40%"})
+      $('#resizable-editor').slideToggle("slow", function(){
         window.dispatchEvent(new Event('resize'));
       });
 
@@ -82,7 +101,7 @@ var Util = {
   },
   retrieveAPIData: function(url){
     // this should render obsolute the need for access token as a parameter.
-    var access_token = this.access_token
+    var access_token = this.access_token;
     var url_with_access = url.includes("?") ? url + "&access_token=" + access_token : url + "?access_token=" + access_token;
     return $.get(url_with_access);
   },
@@ -102,9 +121,13 @@ var Util = {
     $("#preview").html(newText);
   },
   setSaveParameters: function(data){
+    //console.log("setSaveParameters");
+    //console.log(data);
     var branch = data.url.split("?ref=")[1]
-    var repo = data.repo ? data.repo : data.url.split("https://api.github.com/repos/")[1].split("/contents/")[0];
+    var repo = data.repo ? data.repo : data.url.split(this.apiBaseUrl + "repos/")[1].split("/contents/")[0];
+
     var path = data.path.split("/" + data.name)[0] === data.name ? "" : data.path.split("/" + data.name)[0];
+    console.log(path);
     $("#sha").val(data.sha);
     $("#save-url").html(data.url);
     $("#repo").val(repo);
@@ -117,7 +140,7 @@ var Util = {
     Doc.setModified(false);
     // Doc.modified = false;
     // Util.browserNavCheck(false);
-    Repo.retrieveAndSetRepoState("https://api.github.com/repos/" + repo)
+    Repo.retrieveAndSetRepoState(this.apiBaseUrl + "repos/" + repo)
   },
   clearSaveParameters: function(){
     $("#sha").val("");
@@ -155,7 +178,7 @@ var Util = {
   // this function sets browser behavior for when there are saved and unsaved changes
   // it needs to be recalled whenever
   browserNavCheck(changes){
-    console.log("test", changes);
+    //console.log("test", changes);
     window.onbeforeunload = function() {
       if (changes)
       return Util.confirm();
@@ -207,6 +230,44 @@ var Util = {
         _this.createPreviewContent(content);
         Util.clearSaveParameters();
 
+    }
+  },
+  toggleHelp: function(){
+    $("#help-content").empty();
+    $("#help-viewer").addClass("visible");
+
+    if(!$.isEmptyObject(Util.helpUrls)){
+      var help = Util.helpUrls[0];
+      var url = Util.apiBaseUrl + help.url;
+      console.log(help);
+      if(help.display == "md"){
+        //Load markdown
+        $('#help-content').html('Load md here');
+        var access_token = this.access_token;
+        var url_with_access = url.includes("?") ? url + "&access_token=" + access_token : url + "?access_token=" + access_token;
+        var content = "";
+        $.ajax({
+          url: url_with_access,
+          headers: {'accept':'application/vnd.github.VERSION.html'},
+          success: function(response){
+            content = response;
+            $('#help-content').html(content);
+          },
+          error: function(response){
+            console.log(response);
+          }
+        });
+      } else if (help.display == "iframe"){
+        // Make and load iFrame
+        $('#help-content').append('<iframe id="help-iframe">Help viewer iFrame</iframe>');
+        $('#help-iframe').attr('src',Util.helpUrls[0].url);
+        console.log(Util.helpUrls[0].url);
+      } else {
+        //Print no help file loaded
+        $('#help-content').html("No help documentation correctly configured.");
+      }
+    } else {
+      $('#help-content').html("No help documentation.");
     }
   }
 }

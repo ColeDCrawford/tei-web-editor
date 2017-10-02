@@ -29,7 +29,7 @@ var Open = {
 
       var tree = data.tree
 
-      var repoUrl = "https://api.github.com/repos/" + repo;
+      var repoUrl = Util.apiBaseUrl + "repos/" + repo;
       $("#repo-browser-branch").html('<p><a href="#" class="display-repo-list" title="Back to repo list">Repo</a>: ' + repo + ' | <a href="#" class="display-open-repo-branch-list" data-url="' + repoUrl + '" title="Back to branch list">Branch</a>: ' + branch + ' | Path: ' + path + ' | <a href="#"><span class="glyphicon glyphicon-level-up"></span></a></p>');
 
       for (var i = 0, len = tree.length; i < len; i++) {
@@ -52,7 +52,7 @@ var Open = {
         "sha": branchSourceSha
       }
       var access_token = Util.access_token;
-      var url = "https://api.github.com/repos/" + repo + "/" + "git/refs"
+      var url = Util.apiBaseUrl + repo + "/" + "git/refs"
       var url_with_access = url.includes("?") ? url + "&access_token=" + access_token : url + "?access_token=" + access_token;
       $.ajax({
         url: url_with_access, // your api url
@@ -62,7 +62,7 @@ var Open = {
         data: JSON.stringify(new_branch_data),
 
         success: function(data, status, res) {
-          var repo_base = "https://api.github.com/repos/" + repo;
+          var repo_base = Util.apiBaseUrl + "repos/" + repo;
           _this.displayOpenTree(repo_base, branchName, branchSourceSha, "", repo)
         },
         error: function(res, status, error){
@@ -75,7 +75,7 @@ var Open = {
     var url = repo_base + "/branches";
     Util.retrieveAPIData(url).done(function(data){
 
-      var repo = repo_base.split("https://api.github.com/repos/")[1];
+      var repo = repo_base.split(Util.apiBaseUrl + "repos/")[1];
       //TODO Needs to refactor in to one "clear" function; this is repeated below in the display tree function
       $("#repo-browser-list > tbody").empty();
       $("#repo-browser-list > h3").remove();
@@ -99,8 +99,7 @@ var Open = {
     $("#repositories > tbody").empty();
     $("#suggested-repositories > tbody").empty();
 
-    var url = "https://api.github.com/user/repos"
-    url = url + "?per_page=100";
+    var url = Util.apiBaseUrl + "user/repos?per_page=100";
     Util.retrieveAPIData(url).done(function(data){
       if (Recent.files.length === 0) {
         $("#recentfiles").append('<tr><td>No recent files available</td></tr>');
@@ -123,6 +122,7 @@ var Open = {
   },
   createFork: function(url){
     //this conditionally allows a user to just past the normal html address of the reop to be forked.
+    //Haven't updated to use Util.apiBaseUrl yet - no need as can't fork a normal GitHub repo to GH Enterprise
     if (url.includes("https://github.com/")){
       var repo = url.split("https://github.com/")[1];
       var url = "https://api.github.com/repos/" + repo;
