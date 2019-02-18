@@ -1,8 +1,7 @@
 //style import
 import './styles/style.scss';
 
-global.jQuery = require('jquery'), require("jquery-ui");
-//var resizable = require("jquery-resizable");
+global.jQuery = require('jquery');
 var $ = global.jQuery;
 
 import App from "./components/Main.js";
