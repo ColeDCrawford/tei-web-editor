@@ -95,7 +95,6 @@ var Util = {
     $("#editor-wrapper").addClass("side-by-side");
     $("#side-view").addClass("view-active");
     $("#stacked-view").removeClass("view-active");
-    console.log("SIDE BY SIDE");
     $("#mirador-viewer").width("50%");
     $("#mirador-viewer").height("100%");
     $("#xml-wrapper").width("50%");
