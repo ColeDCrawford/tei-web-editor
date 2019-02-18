@@ -95,16 +95,28 @@ var Util = {
     $("#editor-wrapper").addClass("side-by-side");
     $("#side-view").addClass("view-active");
     $("#stacked-view").removeClass("view-active");
-
+    console.log("SIDE BY SIDE");
     $("#mirador-viewer").width("50%");
     $("#mirador-viewer").height("100%");
     $("#xml-wrapper").width("50%");
     $("#xml-wrapper").height("100%");
     $("#resizable-editor").width("100%");
     $("#resizable-editor").height("50%");
+    $("#preview").removeAttr('style');
+    //$("#preview").width("100%");
+    $("#preview").height("50%");
+    var maxHeight = $("#xml-wrapper").height() - 100;
 
     $( "#resizable-editor" ).resizable({
       handles: "s",
+      resize: function(event,ui){
+        editor.resize();
+        var h = $("#xml-wrapper").height();
+        $("#preview").height(h - ui.size.height);
+      },
+      maxHeight: maxHeight,
+      minHeight: 100
+      //alsoResize: "#preview"
     });
   },
   stacked: function(){
@@ -118,9 +130,17 @@ var Util = {
     $("#xml-wrapper").width("100%");
     $("#resizable-editor").width("50%");
     $("#resizable-editor").height("100%");
-
+    $("#preview").width("50%");
+    $("#preview").height("100%");
+    var maxWidth = $("#xml-wrapper").width() - 100;
     $( "#resizable-editor" ).resizable({
-      handles: "e",
+      minWidth:100,
+      maxWidth: maxWidth,
+      resize: function( event, ui ) {
+        editor.resize();
+      },
+      handles:"e",
+      //alsoResize: "#preview"
     });
   },
   undarken: function(){

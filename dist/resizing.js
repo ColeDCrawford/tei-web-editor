@@ -4,20 +4,22 @@ $(document).ready(function() {
   //   handles: "w",
   // });
   editor = ace.edit('editor');
+
+  var maxWidth = $("#xml-wrapper").width() - 100;
   $( "#resizable-editor" ).resizable({
     minWidth:100,
+    maxWidth: maxWidth,
     resize: function( event, ui ) {
       editor.resize();
-      console.log("resize resizable editor")
     },
-    handles:"e"
+    handles:"e",
+    //alsoResize: "#preview"
   });
   $("#mirador-viewer").resizable({
     alsoResize: "#xml-wrapper",
     minWidth:100,
     resize: function(event,ui){
       $(".workspace-container .layout-slot").height("100%");
-      console.log("resize");
     },
   })
 });
