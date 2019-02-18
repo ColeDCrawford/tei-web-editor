@@ -1,4 +1,4 @@
-global.jQuery = require('jQuery');
+global.jQuery = require('jquery');
 var $ = global.jQuery;
 var base64 = require('base-64');
 
@@ -6,12 +6,22 @@ import Renderer from "./Renderer.js";
 import Doc from "./Doc.js";
 import Recent from "./Recent.js";
 import Repo from "./Repo.js";
+import Compare from "./Compare.js";
 
 var ace = require('brace');
 var aceEditor;
 
 var Util = {
   access_token: "",
+  setCompareDocs: function(docs){
+    this.compareDocs = docs;
+    console.log("set Compare Docs");
+    console.log(this.compareDocs);
+    Compare.createStack(this.compareDocs);
+  },
+  setCompareStyle: function(style){
+    this.compareStyle = style;
+  },
   setAccessToken: function(access_token){
     this.access_token = access_token;
   },
@@ -81,6 +91,38 @@ var Util = {
     });
 
   },
+  sideBySide: function(){
+    $("#editor-wrapper").addClass("side-by-side");
+    $("#side-view").addClass("view-active");
+    $("#stacked-view").removeClass("view-active");
+
+    $("#mirador-viewer").width("50%");
+    $("#mirador-viewer").height("100%");
+    $("#xml-wrapper").width("50%");
+    $("#xml-wrapper").height("100%");
+    $("#resizable-editor").width("100%");
+    $("#resizable-editor").height("50%");
+
+    $( "#resizable-editor" ).resizable({
+      handles: "s",
+    });
+  },
+  stacked: function(){
+    $("#editor-wrapper").removeClass("side-by-side");
+    $("#side-view").removeClass("view-active");
+    $("#stacked-view").addClass("view-active");
+
+    $("#xml-wrapper").removeAttr('style');
+    $("#mirador-viewer").width("100%");
+    $("#mirador-viewer").height("40%");
+    $("#xml-wrapper").width("100%");
+    $("#resizable-editor").width("50%");
+    $("#resizable-editor").height("100%");
+
+    $( "#resizable-editor" ).resizable({
+      handles: "e",
+    });
+  },
   undarken: function(){
     $('#editor').removeClass("darkened");
     $('#preview').removeClass("darkened");
@@ -103,6 +145,7 @@ var Util = {
     // this should render obsolute the need for access token as a parameter.
     var access_token = this.access_token;
     var url_with_access = url.includes("?") ? url + "&access_token=" + access_token : url + "?access_token=" + access_token;
+    console.log("URL_with_access:" + url_with_access);
     return $.get(url_with_access);
   },
   parseXMLContent: function(data){
@@ -194,6 +237,10 @@ var Util = {
         _this.addXMLContent(content);
         _this.createPreviewContent(content);
         _this.setSaveParameters(data);
+        //console.log(data);
+        //$('body').append('<div id="temp"></div>');
+        //var d = JSON.stringify(data);;
+        //$('#temp').text(d);
       });
     }
   },

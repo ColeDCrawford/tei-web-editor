@@ -1,4 +1,4 @@
-global.jQuery = require('jQuery');
+global.jQuery = require('jquery');
 var $ = global.jQuery;
 var Mousetrap = require('mousetrap');
 

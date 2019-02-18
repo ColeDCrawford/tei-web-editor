@@ -2,7 +2,7 @@
   box-sizing: border-box;
   width: 50%;
   float: left;
-  overflow-y: scroll;
+  // overflow-y: scroll; only on #preview
 }
 
 .no-padding{
@@ -58,4 +58,5 @@ textarea.acce_text-input {
   flex: 1;
   padding-left: 2%;
   padding-right: 2%;
+  overflow-y: scroll;
 }

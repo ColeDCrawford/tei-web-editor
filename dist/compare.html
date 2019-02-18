@@ -1,0 +1,200 @@
+<html>
+  <head>
+    <title>TEI Web Editor</title>
+    <link rel="stylesheet" type="text/css" href="mirador-2.7/css/mirador-combined.css">
+    <link rel="stylesheet" type="text/css" href="MiradorDisableZoom.css">
+
+    <link rel="stylesheet" type="text/css" href="xmlstyles/default.css" title="default" class="preview-style-link">
+    <link rel="stylesheet" type="text/css" href="xmlstyles/lbp-1.0.0-critical.css" title="lbp-1.0.0-critical" class="preview-style-link">
+  </head>
+  <body>
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>if (window.module) module = window.module;</script>
+    <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="bundle.js"></script>
+    <script src="mirador-2.7/mirador.js"></script>
+    <script src="MiradorDisableZoom.js"></script>
+    <script src="mirador-instance.js"></script>
+    <script src="resizing.js"></script>
+
+    <!-- <script src="xmlstyles/lbp-1.0.0-critical.js" title="lbp-1.0.0-critical" class="preview-style-link"></script> -->
+
+    <nav class="navbar navbar-default" style="margin-bottom: 0px;">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand">TEI Web Editor - Compare</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav" id="navbar-menu-list">
+            <!-- <li><a href="/">Home</a></li>
+            <li><a href="/editor">Editor</a></li> -->
+            <!-- <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">File <span class="caret"></span></a>
+              <ul class="dropdown-menu"> -->
+              <li>
+                <a href="index.html" id = "editor-link" title = "Editor">
+                    <span>Editor</span>
+                </a>
+              </li>
+              <!-- </ul>
+            </li> -->
+
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            <li id="help-menu"><a href="#">Help</a></li>
+            <li id="user-login-display"><a href="/login">Login</a></li>
+
+        </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
+  <div id="compare-wrapper">
+
+  </div>
+
+  <!-- <div id="editor-wrapper">
+    <div id="mirador-viewer"></div>
+    <div id="xml-wrapper">
+      <div id="resizable-editor" class="window">
+        <div id="editor"></div>
+      </div>
+      <div id="preview" class="window"></div>
+    </div>
+  </div> -->
+  <div id="dir" class="file-window">
+    <button type="button" class="close" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div>
+      <form id="open-file-manually">
+        <div class="form-group">
+          <label for="manual-url"><h3>Add by URL</h3></label>
+          <input type="text" class="form-control" id="manual-url" name="manual-url" placeholder="https://api.github.com/repos/scta-texts/summahalensis/contents/ahsh-l1p1i1t1q1c1/ahsh-l1p1i1t1q1c1.xml?ref=sandbox">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+    </div>
+    <div>
+      <h3>Recent Files</h3>
+      <table id="recentfiles" class="table table-condensed">
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h3>My Repositories</h3>
+      <table id="repositories" class="table table-condensed">
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h3>Suggested Repositories to Start From</h3>
+      <table id="suggested-repositories" class="table table-condensed">
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h3>Fork another repository</h3>
+      <form id="fork-manual">
+        <div class="form-group">
+          <input type="text" class="form-control" id="fork-url" name="fork-url">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+    </div>
+  </div>
+  <div id="repo-browser" class="file-window">
+    <button type="button" class="close" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <p>
+      <div id="repo-browser-branch">
+      </div>
+      <table id="repo-browser-list" class="table table-condensed">
+        <thead>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </p>
+  </div>
+  <div id="save" class="file-window">
+    <button type="button" class="close" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div style="margin-bottom: 14px; border-bottom: 1px solid black;">
+      <label for="save-url">File Path</label>
+      <p type="text" name="save-url" id="save-url" style="word-wrap: break-word;"/>
+    </div>
+    <form id="save-form" style="float: left; width: 30%; box-sizing: border-box;">
+      <div class="form-group">
+        <label for="repo">Repo</label><br/>
+        <input type="text" name="repo" id="repo" disabled class="input-disabled"/>
+      </div>
+      <div class="form-group">
+        <label for="path">Path</label><br/>
+        <input type="text" name="path" id="path" disabled class="input-disabled"/>
+      </div>
+      <div class="form-group">
+        <label for="file-name">Filename</label><br/>
+        <input type="text" name="path" id="file-name"/>
+      </div>
+      <div class="form-group">
+        <label for="branch">Branch</label><br/>
+        <input type="text" name="branch" id="branch" disabled class="input-disabled"/>
+      </div>
+      <div class="form-group">
+        <label for="sha">Last Commit</label><br/>
+        <input type="text" name="sha" id="sha" disabled class="input-disabled"/>
+      </div>
+      <div class="form-group">
+        <label for="branch">Message</label><br/>
+        <input type="text" name="message" id="message"/>
+      </div>
+      <div class="form-group"><br/>
+        <input type="submit" id="save" value="save"/>
+      </div>
+    </form>
+    <div id="save-as-file-browser" style="float: left; width: 70%; box-sizing: border-box;">
+      <table id="save-as-file-browser-list-wrapper" class="table table-condensed">
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div id="save-as-new-repo-or-directory" style="margin: 2px; padding: 2px;">
+    </div>
+  </div>
+  <div id="pull-request-viewer" class="file-window">
+    <button type="button" class="close" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div id="current-repo">
+    </div>
+    <div id="target-repo">
+    </div>
+  </div>
+  <div id="help-viewer" class="file-window">
+    <button type="button" class="close" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div id="help-content">
+    </div>
+  </div>
+  </body>
+</html>

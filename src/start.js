@@ -1,8 +1,8 @@
 //style import
 import './styles/style.scss';
 
-global.jQuery = require('jQuery');
-var resizable = require("jquery-resizable");
+global.jQuery = require('jquery'), require("jquery-ui");
+//var resizable = require("jquery-resizable");
 var $ = global.jQuery;
 
 import App from "./components/Main.js";
@@ -37,7 +37,7 @@ var customSettings = {
     {
       name: "Test Help File",
       description:"",
-      url: "repos/rak772/MaryMagdalene/contents/test-help.md",
+      url: "repos/rak772/MaryMagdalene/contents/help.md",
       display: "md"
     },
     {
@@ -50,7 +50,38 @@ var customSettings = {
   hidePreviewStyles: true,
   hideSuggestedRepos: false,
   hideForkAnotherRepo: true,
-  hidePR: true
+  hidePR: true,
+  //options: vertical-stack, side
+  compareDefaultStyle: "vertical-stack",
+  compareDefaultDocs: [
+    {
+      url: "repos/rak772/MaryMagdalene/contents/manuscript_B1_JennyKoerber.xml?ref=manuscript_B1_JennyKoerber"
+    },
+    {
+      url: "repos/rak772/MaryMagdalene/contents/manuscript_B2_HansPech.xml?ref=manuscript_B2_HansPech"
+    },
+    {
+      url: "repos/rak772/MaryMagdalene/contents/manuscript_D_AnnaKelner.xml?ref=manuscript_D_AnnaKelner"
+    },
+    {
+      url: "repos/rak772/MaryMagdalene/contents/manuscript_G_EleanorGoerss.xml?ref=manuscript_G_EleanorGoerss"
+    },
+    {
+      url: "repos/rak772/MaryMagdalene/contents/manuscript_K1_ZacharyHayworth.xml?ref=manuscript_K1_ZacharyHayworth"
+    },
+    {
+      url: "repos/rak772/MaryMagdalene/contents/manuscript_K2_EleanorGoerss.xml?ref=manuscript_K2_EleanorGoerss"
+    },
+    {
+      url: "repos/rak772/MaryMagdalene/contents/ manuscript_N_RobertRoessler.xml?ref=manuscript_N_RobertRoessler"
+    },
+    {
+      url: "repos/rak772/MaryMagdalene/contents/ manuscript_N_SusanneZwierlein.xml?ref=manuscript_N_SusanneZwierlein"
+    },
+    {
+      url: "repos/rak772/MaryMagdalene/contents/manuscript_S_RachaKirakosian.xml?ref=manuscript_S_RachaKirakosian"
+    }
+  ]
 }
 
 //preview styles currently have to select from supported options of which there are currently tei-keywords

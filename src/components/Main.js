@@ -8,7 +8,7 @@ require('brace/ext/searchbox');
 require('brace/ext/settings_menu');
 
 
-global.jQuery = require('jQuery');
+global.jQuery = require('jquery');
 var $ = global.jQuery;
 require('bootstrap-loader');
 
@@ -24,6 +24,7 @@ import Pr from "./Pr.js";
 import KeyBoardShortCuts from "./KeyBoardShortCuts.js";
 import Preview from "./Preview.js";
 import User from "./User.js";
+import Compare from "./Compare.js";
 
 
 const access_token = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*\=\s*([^;]*).*$)|^.*$/, "$1");
@@ -37,11 +38,13 @@ var Main = {
     } else {
       Util.setBaseUrls("https://api.github.com/", "https://github.com");
     }
+    Util.setAccessToken(access_token);
+
     Util.setHelpUrls(customSettings.helpUrls);
     Util.removeExtras(customSettings.hideSuggestedRepos, customSettings.hideForkAnotherRepo, customSettings.hidePR);
+    Util.setCompareDocs(customSettings.compareDefaultDocs);
+    Util.setCompareStyle(customSettings.compareDefaultStyle);
 
-    console.log(access_token)
-    Util.setAccessToken(access_token);
     aceEditor = ace.edit("editor");
     aceEditor.setTheme("ace/theme/kuroir");
     aceEditor.session.setMode("ace/mode/xml");
@@ -109,6 +112,13 @@ var Main = {
     // open Help Menu
     $(document).on("click", "#help-menu", function(){
       Util.toggleHelp();
+    });
+
+    $(document).on("click", "#side-view", function(){
+      Util.sideBySide();
+    })
+    $(document).on("click", "#stacked-view", function(){
+      Util.stacked();
     })
 
   //======================================================== //
@@ -352,6 +362,17 @@ var Main = {
 
   //======================================================== //
   // END MISCELLANEOUS EVENTS
+
+  // COMPARE EVENTS //
+  //======================================================== //
+    // window.onload = function(){
+    //   var sPath= window.location.pathname;
+    //   var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
+    //   alert(sPage);
+    //   Compare.createStack(Compare.compareDocs);
+    // };
+  //======================================================== //
+
   //end of event handling functions
   }
 
