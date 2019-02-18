@@ -19,7 +19,7 @@ var User = {
   },
   displayUserName: function(data){
     console.log(data);
-    $("#user-login-display").html('<a href="/login">' + data.login + '</a>');
+    $("#user-login-display").html('<a href="http://digital-editing.fas.harvard.edu:4567/login">' + data.login + '</a>');
   }
 }
 
