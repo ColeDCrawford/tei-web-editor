@@ -30,8 +30,8 @@ var customSettings = {
       description: "A customized styling for xml docs created to comply with the LombardPress-1.0.0-Critical customized TEI Schema"
     }
   ],
-  apiBaseUrl : "https://code.harvard.edu/api/v3/",
-  baseUrl: "https://code.harvard.edu/",
+  apiBaseUrl : "https://api.github.com/",
+  baseUrl: "https://github.com/",
   helpUrls:[
     {
       name: "Test Help File",
